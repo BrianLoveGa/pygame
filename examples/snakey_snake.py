@@ -12,7 +12,7 @@ class cube(object):
     rows = 20
     w = 500
 
-    def __init__(self, start, dirnx=1, dirny=0, color=(255, 0, 0)):
+    def __init__(self, start, dirnx=1, dirny=0, color=(119, 179, 0)):
         self.pos = start
         self.dirnx = 1
         self.dirny = 0
@@ -137,8 +137,8 @@ def drawGrid(w, rows, surface):
         x = x + sizeBtwn
         y = y + sizeBtwn
 
-        pygame.draw.line(surface, (255, 255, 255), (x, 0), (x, w))
-        pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y))
+        pygame.draw.line(surface, (217, 217, 217), (x, 0), (x, w))
+        pygame.draw.line(surface, (217, 217, 217), (0, y), (w, y))
 
 
 def redrawWindow(surface):
@@ -181,8 +181,8 @@ def main():
     width = 500
     rows = 20
     win = pygame.display.set_mode((width, width))
-    s = snake((255, 0, 0), (10, 10))
-    snack = cube(randomSnack(rows, s), color=(0, 255, 0))
+    s = snake((119, 179, 0), (10, 10))
+    snack = cube(randomSnack(rows, s), color=(255, 0, 255))
     flag = True
 
     clock = pygame.time.Clock()
@@ -193,7 +193,7 @@ def main():
         s.move()
         if s.body[0].pos == snack.pos:
             s.addCube()
-            snack = cube(randomSnack(rows, s), color=(0, 255, 0))
+            snack = cube(randomSnack(rows, s), color=(255, 0, 255))
 
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z: z.pos, s.body[x+1:])):
