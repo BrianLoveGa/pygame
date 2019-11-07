@@ -21,10 +21,12 @@ screen_width = 100
 class player:
     def __init__(self):
         self.name = ''
+        self.job = ''
         self.health = 0
         self.magic = 0
         self.status_effects = []
         self.location = 'start'
+        self.game_over = False
 
 # create basic
 
@@ -76,7 +78,6 @@ def title_screen():
 
 def help_menu():
         os.system('clear')
-    print()
     print('#######################################')   
     print("#   Welcome to Brians text RPG game   #")
     print('#######################################')
@@ -102,9 +103,6 @@ def help_menu():
 
 
 
-# GAME FUNCTIONALITY
-
-def start_game():
 
 
 
@@ -120,10 +118,10 @@ def start_game():
 #   |       |  start   |        |forest |forest |   b5
 #  _|_______|__________|________|_______|_______|_ 
 #   |       |          |        |       |       |
-#   |       |          |        |       |       |   c5
+#   | swamp |  swamo   | hill   |valley |  cave |   c5
 #  _|_______|__________|________|_______|_______|_ 
-#   |       |          |        |       |       |
-#   |       |          |        |       |       |   d5
+#   |       |swamp     |        |       |       |
+#   | marsh |          | hill   |valley | hills |   d5
 #  _|_______|__________|________|_______|_______|_ 
 #   |castle |  castle  | castle | castle| castle|
 #   | gate  | entrance | guard  | hall  | throne|   e5
@@ -403,3 +401,193 @@ zonemap = [
         RIGHT = '',
     }
 ]
+
+# game interactivity section
+
+def print_location():
+    print('\n' + ('#' * (4 + len(myPlayer.location))))
+    print('\n' + ('#' * (4 + len(myPlayer.location))))
+    print('# _-_ ' + myPlayer.location.upper() + ' #')
+    print('# ' + zonemap[myPlayer.position][DESCRIPTION] + ' #')
+    print('\n' + ('#' * (4 + len(myPlayer.location))))
+    print('\n' + ('#' * (4 + len(myPlayer.location))))
+
+def prompt():
+    print('\n' + '+' * (4 + len(myPlayer.location))))
+    print('\n' + '+' * (4 + len(myPlayer.location))))
+    print('+     what would you like to do ?      +')
+    print('+         options include :            +')
+    print()
+    print('+   move , go, travel, walk, examine   +')
+    print('+  inspect, interact, look, and quit   +')
+    print('\n' + '+' * (4 + len(myPlayer.location))))
+    print('\n' + '+' * (4 + len(myPlayer.location))))
+    action = input(">")
+    acceptable_actions = ['move', 'go', 'travel', 'walk', 'quit', 'examine', 'inspect', 'interact', 'look']
+    while action.lower() not in acceptable_actions:
+        print("unknown action typed, try again.\n")
+        action = input(">")
+    if action.lower() == 'quit':
+        sys.exit()
+
+    elif action.lower() in ['move', 'go', 'travel', 'walk']:
+        player_move(action.lower())
+
+    elif action.lower() in ['examine', 'inspect', 'interact', 'look']:
+        player_examine(action.lower())
+
+    # if action.lower()
+    # if action.lower()
+
+def player_move(myAction):
+    ask = "where would you like to move to?\n"
+    dest = input(ask)
+    if dest in ['up', 'north']:
+        destination = zonemap[myPlayer.location][UP]
+        movement_handler()
+    elif dest in ['down', 'south']:
+        destination = zonemap[myPlayer.location][DOWN]
+        movement_handler()
+    elif dest in ['left', 'west']:
+        destination = zonemap[myPlayer.location][LEFT]
+        movement_handler()
+    elif dest in ['right', 'east']:
+        destination = zonemap[myPlayer.location][RIGHT]
+        movement_handler()
+
+def movement_handler(destination):
+    print("\n" + "!! you have moved to " + destination + " on the map.  !!")
+    myPlayer.location = destination
+    print_location()
+   
+def player_examine(action):
+    if zonemap[myPlayer.location][SOLVED]:
+        print("nothing left here to do move to another zone") 
+    else:
+        print("puzzle here or fight or somehting")
+
+
+# GAME FUNCTIONALITY section
+
+def start_game():
+    return
+
+
+def main_game_loop():
+    while myPlayer.game_over is False:
+        prompt()
+        # here handle if puzzles solved, boss defeated, all zones explored....
+
+
+
+def set_up_game():
+    os.system('clear')
+
+    # what's in a name
+    question1 = "Hello, what's your name?\n"
+    for character in question1:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.05)
+    player_name = input(">")
+    myPlayer.name = player_name
+
+    # need a job ?
+    question2 = "Hello, what role do you want to play?\n"
+    question2add = " Choose: warrior , wizard, or thief ... \n"
+    for character in question2:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.05)
+    for character in question2:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.02)
+    player_job = input(">")
+    valid_jobs = ['warrior', 'wizard', 'thief']
+    if player_job.lower() in valid_jobs:
+        myPlayer.job = player_job
+        print( "Greetings " + myPlayer.name + " The " + myPlayer.job + " ." )
+    while player_job.lower() not in valid_jobs:
+        player_job = input(">")
+        if player_job.lower() in valid_jobs:
+            myPlayer.job = player_job
+            print( "Greetings " + myPlayer.name + " The " + myPlayer.job + " ." )
+
+    if myPlayer.job is 'warrior':
+        self.health = 120
+        self.magic = 20
+        self.status_effects = ['axe_swing']
+    if myPlayer.job is 'wizard':
+        self.health = 50
+        self.magic = 120
+        self.status_effects = ['fire_ball']
+    if myPlayer.job is 'thief':
+        self.health = 80
+        self.magic = 80
+        self.status_effects = ['sneak_out']
+
+
+### intro
+    intro1 = ".. your health is " + self.health + " hp ! .."
+    intro2 = ".. your magic is " + self.magic + " mp ! .."
+    intro3 = ".. Welcome to Olde Woode Stock .."
+    intro4 = ".. I hope you enjoy your time .. "
+    intro5 = ".. when suddenly there was a noise .."
+    intro6 = ".. SSSSSSCCCCRRRRRCCCCHHHHHH!!!!!@$#<<|>> .. "
+    intro7 = ".. oh no what was that awful screech .."
+    intro8 = ".. lets go see what the noise was .."
+
+    for character in intro1:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.06)
+    for character in intro2:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.06)
+    for character in intro3:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.06)
+    for character in intro4:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.04)
+    for character in intro5:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.04)
+    for character in intro6:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.01)
+    for character in intro7:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.02)
+    for character in intro8:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.03)
+    # for character in intro1:
+    #     sys.stdout.write(character)
+    #     sys.stdout.flush()
+    #     time.sleep(0.02)
+
+    os.system('clear')
+    print("#$#$#$#$#$#$#$#$#$#$#$#$#")
+    print('#$#                   #$#')
+    print('#$#                   #$#')
+    print('#$#     LETS BEGIN    #$#')
+    print('#$#                   #$#')
+    print('#$#                   #$#')
+    print('#$#  game starts now  #$#')
+    print('#$#                   #$#')
+    print("#$#$#$#$#$#$#$#$#$#$#$#$#")
+    main_game_loop()
+
+
+
+
+title_screen()
