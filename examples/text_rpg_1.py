@@ -13,7 +13,7 @@ import random
 
 # for game
 
-screen_width = 100
+screen_width = 200
 
 # basic start player setup
 
@@ -484,7 +484,7 @@ def set_up_game():
     os.system('clear')
 
     # what's in a name
-    question1 = "Hello, what's your name?\n"
+    question1 = "Greetings stranger ... I'm the narrator for your story ... what's your name?\n"
     for character in question1:
         sys.stdout.write(character)
         sys.stdout.flush()
@@ -516,22 +516,23 @@ def set_up_game():
                   " The " + myPlayer.job + " .\n")
 
     if myPlayer.job is 'warrior':
-        myPlayer.health = 120
-        myPlayer.magic = 20
-        myPlayer.status_effects = ['axe_swing']
+        self.health = 120
+        self.magic = 20
+        self.status_effects = ['axe_swing']
     if myPlayer.job is 'wizard':
-        myPlayer.health = 50
-        myPlayer.magic = 120
-        myPlayer.status_effects = ['fire_ball']
+        self.health = 50
+        self.magic = 120
+        self.status_effects = ['fire_ball']
     if myPlayer.job is 'thief':
-        myPlayer.health = 80
-        myPlayer.magic = 80
-        myPlayer.status_effects = ['sneak_out']
+        self.health = 80
+        self.magic = 80
+        self.status_effects = ['sneak_out']
 
 
 # intro
-    intro1 = f".. your health is a number"  " hp ! ..\n"
-    intro2 = f".. your magic is a different number" " mp ! ..\n"
+    intro1 = f".. your health is a number" + str(myPlayer.health) +  " hp ! ..\n"
+    intro2 = f".. your magic is a different number" + \
+        str(myPlayer.magic) + " mp ! ..\n"
     intro3 = ".. Welcome to Ye Olde Wooden Stock ..\n"
     intro4 = ".. I hope you enjoy your time .. \n"
     intro5 = ".. when suddenly there was a noise ..\n"
