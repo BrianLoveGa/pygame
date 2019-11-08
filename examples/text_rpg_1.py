@@ -1,7 +1,23 @@
-# python text rpg. based on youtube tutorial Bryan Tong
 # https://www.youtube.com/watch?v=xHPmXArK6Tg&t=46s
+# python text rpg. based on youtube tutorial Bryan Tong
+
+# AND youtube tutorial Vincent Gizzarelli
+# https://www.youtube.com/watch?v=VXVCDHSzy6k
 
 # adapted and modified By: Brian Loveless
+
+
+####### WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+#######
+#######
+#######                         WARRIOR ADVENTURE GAME
+#######
+#######
+#######                         By: B _-_ Love -- (C) Nov 2019
+#######
+#######
+####### <><<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
 
 # imports if stand-alone python fikle
 import cmd
@@ -20,108 +36,157 @@ screen_width = 200
 
 class player:
     def __init__(self):
-        self.name = ''
-        self.job = ''
-        self.health = 0
-        self.magic = 0
-        self.status_effects = []
-        self.position = 'b2'
-        self.game_over = False
-        self.solves = 0
+        self.name = '';
+        self.maxhealth = 100;
+        self.position = 'b2';
+        self.game_over = False;
+        self.solves = 0;
+        self.attack=10;
+        self.health = self.maxhealth;
+        #self.magic = 0
+        #self.special = '';
+        #self.spatck = 15;
 
-# create basic
+# create basic player 
 
 
-myPlayer = player()
+myPlayer = player();
 
 # title screen
 
 
 def title_screen_selections():
     option = input("> ")
-    if option.lower() == ("play"):
+    if option.lower() in  ["play", "new", "begin"]:
         set_up_game()
     elif option.lower() == ("help"):
         help_menu()
-    elif option.lower() == ("quit"):
+    elif option.lower() in ["quit", "exit", "stop", "back","/q", "q"]:
         sys.exit()
-    while option.lower() not in ['play', 'help', 'quit']:
-        print("please enter a valid command.... play, help, or quit")
+    elif option.lower() == ("load"):
+        load_game()
+        pass
+    while option.lower() not in ['play', 'help', 'quit', 'load']:
+        print(" please enter a valid command .. play, help, load or quit")
         option = input("> ")
         if option.lower() == ("play"):
             set_up_game()
         elif option.lower() == ("help"):
             help_menu()
-        elif option.lower() == ("quit"):
+        elif option.lower() in ["quit", "exit", "stop", "back","/q", "q"]:
             sys.exit()
+        elif option.lower() == ("load"):
+            load_game()
+            pass
 
 
 def title_screen():
     os.system('clear')
     print()
-    print('###################################')
-    print('###################################')
-    print("#  Welcome to Brians text RPG game")
-    print('###################################')
-    print('###################################')
+    print('##########################################')
+    print('##########################################')
+    print("#      Welcome to Brians text RPG game   #")
+    print('##########################################')
+    print('#                                        #')
+    print('#       Warrior Adventure Game           #')
+    print('#                                        #')
+    print('##########################################')
     print()
-    print('            _-_ Play _-_           ')
-    print('            _-_ Help _-_           ')
-    print('            _-_ Quit _-_           ')
+    print(' start new with _-_ Play _-_              ')
+    print('            _-_ Help _-_                  ')
+    print('            _-_ Quit _-_                  ')
+    print('            _-_ Load _-_                  ')
     print()
-    print('###################################')
+    print('#                                        #')
+    print('#                                        #')
+    print('#                                        #')
+    print('#                                        #')
     print()
-    print('        copyright 2019 B-Love      ')
+    print('         copyright 2019 B-Love            ')
     print()
-    print('###################################')
     title_screen_selections()
 
 
 def help_menu():
     os.system('clear')
-    print('#######################################')
-    print("#   Welcome to Brians text RPG game   #")
-    print('#######################################')
+    print('!#################################################!')
+    print('!                  --> HELP <--                   !')
+    print('!#################################################!')
+    print('!#        Welcome to Brians text RPG game        #!')
+    print('!#################################################!')
     print()
-    print('            --> HELP <--               ')
-    print('                                       ')
-    print(' -- Use up, down, left, right to move  ')
-    print('  -- or north, south, east, west       ')
+    print('!        start a new game with play command       !')
+    print('!                type play                        !')
+    print('!                                                 !')
+    print('!      or you can load a game just type load      !')
+    print('!                                                 !')
+    print('!        quit stops the game                      !')
+    print('!#################################################!')
+    print('!             in game play ...                    !')
+    print('!                                                 !')
+    print('!      -- Use up, down, left, right to move       !')
+    print('!       -- or north, south, east, west            !')
     print()
-    print(' -- just type your commands            ')
-    print(' -- to do them                         ')
+    print('!       -- just type your commands                !')
+    print('!        -- to do them                            !')
     print()
-    print(' -- use "look" to inspect something    ')
-    print('                                       ')
-    print('                                       ')
-    print(' -- Good luck brave warrior            ')
-    print('#######################################')
+    print('!       -- use "look" to inspect something        !')
+    print('!     -- use "attack" to .. well... attack        !')
+    print('!                                                 !')
+    print('!         read along, fight, solve riddles        !')
+    print('!            simple text game                     !')
+    print('!      save the town kill the dragon              !')
+    print('!      -- Good luck brave warrior                 !')
+    print('!#################################################!')
     title_screen_selections()
 
 
 # game map   ---  player start @ b2
 #
-#       a1       a2        a3      a4     a5
-#   ________|__________|________|_______|_______|_
-#   |  town |   town   |   town | town  | town  |
-#   |factory|  enter   |  hall  | square| shops |   a5
-#  _|_______|__________|________|_______|_______|_
-#   | woods |          | woods  |       |       |
-#   |       |  start   |        |forest |forest |   b5
-#  _|_______|__________|________|_______|_______|_
-#   |       |          |        |       |       |
-#   | swamp |  swamo   | hill   |valley |  cave |   c5
-#  _|_______|__________|________|_______|_______|_
-#   |       |swamp     |        |       |       |
-#   | marsh |          | hill   |valley | hills |   d5
-#  _|_______|__________|________|_______|_______|_
-#   |castle |  castle  | castle | castle| castle|
-#   | gate  | entrance | guard  | hall  | throne|   e5
-#  _|_______|__________|__room__|_______|_room  |_
-#   |       |          |        |       |       |
+##       can move from square to square 
+#           board does not edge wrap ie no going from a1 to e1 or b1 to b5 
+#  ... from a1 you can go to a2 or b1 .... from a2  ... a1, a3, or b2 ..
+#      the x+ 'walls' are edge of map
+##     the --- or | 'walls' can be moved through
+#      the X 'walls' interior are no pass - those squares don't connect
+#      just pretend ... it's a game .....
+#      the only way to get to cave is from sc hills
+#      0--0--0-- 'walls' need to be unlocked to enter
+#
+#
+#       a1           a2        a3         a4         a5
+#  +|+x+x+xx+x+|+x+x+xx+x+|+x+x+xx+x+|+x+x+xx+x+|+x+x+xx+x+|+
+#  x|          |          |          |          |          |x
+#  +|  town    |   town   |   town   | town     | town     |+
+#  x|factory   |  enter   |  hall    | square   | shops    |x 
+#  +|          |          |          |          |          |+                  a5
+#  -|----------|----------|----------|----------|----------|-
+#  x|          |          |          |          |          |x
+#  +|  woods   |          |   woods  |     1    |     2    |+
+#  x|    w     |  start   |     e    |   forest |  forest  |x                     b5
+#  +|          |          |          |          |          |+
+#  -|----------|----------|----------|----------|xxxxxxxxxx|-
+#  x|          |          |          |          x          |x
+#  +|          |          |     n    |     n    x     x    |+
+#  x| beach    |  swamp1  |   hill   |  valley  x    cave  |x                      c5
+#  +|          |          |          |          x          |+
+#  -|----------|----------|----------|----------|--o--o--o-|-
+#  x|          |          |          |          |          |x
+#  +|          | swamp 2  |     s    |     s    |   s c    |+
+#  x|  marsh   |          |   hill   |   valley |   hills  |x                    d5
+#  +|          |          |          |          |          |+
+#  -|----------|----------|----------|xxxxxxxxxx|xxxxxxxxxx|-
+#  x|          |          |          |          o          |x
+#  +| castle   |  castle  |  castle  o castle   | castle   |+
+#  x|  gate    | entrance |  guard   | hall     o throne   |x                    e5
+#  +|          |          |  room    o          | room     |+
+#  x|          |          |          |          o          |x
+#  _|+x+x+xx+x+|+x+x+xx+x+|+x+x+xx+x+|+x+x+xx+x+|+x+x+xx+x+|_
 #
 #
 #
+
+
 ZONENAME = ''
 DESCRIPTION = 'description'
 EXAMINATION = 'examine'
@@ -132,7 +197,7 @@ LEFT = 'left', 'west'
 RIGHT = 'right', 'east'
 
 solved_places = {'a1': False, 'a2': False, 'a3': False, 'a4': False, 'a5': False,
-                 'b1': False, 'b2': False, 'b3': False, 'b4': False, 'b5': False,
+                 'b1': False, 'b2': True, 'b3': False, 'b4': False, 'b5': False,
                  'c1': False, 'c2': False, 'c3': False, 'c4': False, 'c5': False,
                  'd1': False, 'd2': False, 'd3': False, 'd4': False, 'd5': False,
                  'e1': False, 'e2': False, 'e3': False, 'e4': False, 'e5': False,
@@ -145,9 +210,9 @@ zonemap = {
         DESCRIPTION: 'Where they make the sauce',
         EXAMINATION: 'examine',
         SOLVED: False,
-        UP: '',
+        UP: 'x',
         DOWN: 'b1',
-        LEFT: '',
+        LEFT: 'x',
         RIGHT: 'a2',
     },
     'a2': {
@@ -155,7 +220,7 @@ zonemap = {
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
-        UP: '',
+        UP: 'x',
         DOWN: 'b2',
         LEFT: 'a1',
         RIGHT: 'a3',
@@ -165,7 +230,7 @@ zonemap = {
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
-        UP: '',
+        UP: 'x',
         DOWN: 'b3',
         LEFT: 'a2',
         RIGHT: 'a4',
@@ -175,7 +240,7 @@ zonemap = {
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
-        UP: '',
+        UP: 'x',
         DOWN: 'b4',
         LEFT: 'a3',
         RIGHT: 'a5',
@@ -185,10 +250,10 @@ zonemap = {
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
-        UP: '',
+        UP: 'x',
         DOWN: 'b5',
         LEFT: 'a4',
-        RIGHT: '',
+        RIGHT: 'x',
     },
     'b1': {
         ZONENAME: "west woods",
@@ -197,21 +262,21 @@ zonemap = {
         SOLVED: False,
         UP: 'a1',
         DOWN: 'c1',
-        LEFT: '',
+        LEFT: 'x',
         RIGHT: 'b2',
     },
     'b2': {
         ZONENAME: "Home start base",
         DESCRIPTION: 'This is your home - starting point',
         EXAMINATION: 'it\'s a nice place, but not great let\'s get out and go explore maybe the town up north?',
-        SOLVED: False,
+        SOLVED: True,
         UP: 'a2',
         DOWN: 'c2',
         LEFT: 'b1',
         RIGHT: 'b3',
     },
     'b3': {
-        ZONENAME: "Woods",
+        ZONENAME: "E Woods",
         DESCRIPTION: 'trees boring stupid trees',
         EXAMINATION: 'some squirrels',
         SOLVED: False,
@@ -221,7 +286,7 @@ zonemap = {
         RIGHT: 'b4',
     },
     'b4': {
-        ZONENAME: "start forest",
+        ZONENAME: "start forest 1",
         DESCRIPTION: 'the tress are denser here',
         EXAMINATION: 'it\'s much cooler and quieter here',
         SOLVED: False,
@@ -231,27 +296,27 @@ zonemap = {
         RIGHT: 'b5',
     },
     'b5': {
-        ZONENAME: "east forest",
+        ZONENAME: "deep forest 2",
         DESCRIPTION: 'thick with trees',
         EXAMINATION: 'those same blasted squirrels',
         SOLVED: False,
         UP: 'a5',
-        DOWN: 'c5',
+        DOWN: 'x',
         LEFT: 'b4',
-        RIGHT: '',
+        RIGHT: 'x',
     },
     'c1': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "beach",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
         UP: 'b1',
         DOWN: 'd1',
-        LEFT: '',
+        LEFT: 'x',
         RIGHT: 'c2',
     },
     'c2': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "swamp 1",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
@@ -261,7 +326,7 @@ zonemap = {
         RIGHT: 'c3',
     },
     'c3': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "north hills",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
@@ -271,37 +336,37 @@ zonemap = {
         RIGHT: 'c4',
     },
     'c4': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "north valley",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
         UP: 'b4',
         DOWN: 'd4',
         LEFT: 'c3',
-        RIGHT: 'c5',
+        RIGHT: 'x',
     },
     'c5': {
-        ZONENAME: "A1 saucy",
-        DESCRIPTION: 'description',
-        EXAMINATION: 'examine',
+        ZONENAME: "secret cave",
+        DESCRIPTION: 'You have found the secret cave there is a chest inside',
+        EXAMINATION: "it's a cave with a treasure chest - use the key to open it",
         SOLVED: False,
-        UP: 'b5',
-        DOWN: 'd5',
-        LEFT: 'c4',
-        RIGHT: '',
+        UP: 'x',
+        DOWN: 'o',
+        LEFT: 'x',
+        RIGHT: 'x',
     },
     'd1': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "marsh lands",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
         UP: 'c1',
         DOWN: 'e1',
-        LEFT: '',
+        LEFT: 'x',
         RIGHT: 'd2',
     },
     'd2': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "swamp 2",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
@@ -311,84 +376,84 @@ zonemap = {
         RIGHT: 'd3',
     },
     'd3': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "south hills",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
         UP: 'c3',
-        DOWN: 'e3',
+        DOWN: 'o',
         LEFT: 'd2',
         RIGHT: 'd4',
     },
     'd4': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "south valley",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
         UP: 'c4',
-        DOWN: 'e4',
+        DOWN: 'x',
         LEFT: 'd3',
         RIGHT: 'd5',
     },
     'd5': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "soith castle side hills",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
-        UP: 'c5',
-        DOWN: 'e5',
+        UP: 'o',
+        DOWN: 'x',
         LEFT: 'd4',
-        RIGHT: '',
+        RIGHT: 'x',
     },
     'e1': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "castle square",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
         UP: 'd1',
-        DOWN: '',
-        LEFT: '',
+        DOWN: 'x',
+        LEFT: 'x',
         RIGHT: 'e2',
     },
     'e2': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "castle gate",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
         UP: 'd2',
-        DOWN: '',
+        DOWN: 'x',
         LEFT: 'e1',
-        RIGHT: 'e3',
+        RIGHT: 'o',
     },
     'e3': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "Castle guard room",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
         UP: 'd3',
-        DOWN: '',
+        DOWN: 'x',
         LEFT: 'e2',
-        RIGHT: 'e4',
+        RIGHT: 'o',
     },
     'e4': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "Castle hall",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
-        UP: 'd4',
-        DOWN: '',
+        UP: 'x',
+        DOWN: 'x',
         LEFT: 'e3',
-        RIGHT: 'e5',
+        RIGHT: 'o',
     },
     'e5': {
-        ZONENAME: "A1 saucy",
+        ZONENAME: "Castle throne room",
         DESCRIPTION: 'description',
         EXAMINATION: 'examine',
         SOLVED: False,
-        UP: 'd5',
-        DOWN: '',
+        UP: 'x',
+        DOWN: 'x',
         LEFT: 'e4',
-        RIGHT: '',
+        RIGHT: 'x',
     }
 }
 
@@ -396,27 +461,36 @@ zonemap = {
 
 
 def print_location():
-    print('\n' + ('#' * (10 + len(myPlayer.position))))
-    print(('#' * (4 + len(myPlayer.position))))
-    print('# _-_ ' + myPlayer.position.upper() + ' #')
-    print('# ' + (zonemap[myPlayer.position][DESCRIPTION]) + ' #')
-    print('\n' + ('#' * (4 + len(myPlayer.position))))
-    print(('#' * (10 + len(myPlayer.position))))
+    print("@@_-_-_-_-_.................._-_-_-_-_-_-_-@@")
+    print("WM_-_-_-_-_.................._-_-_-_-_-_-_-MW")
+    print("# #    " + (zonemap[myPlayer.position][ZONENAME]) + "     # #")
+    print('# _-_  ' + myPlayer.position.upper() + '   #')
+    print('#  ' + (zonemap[myPlayer.position][DESCRIPTION]) + '   #')
+    print("!!!!_-_-_-_-_.................._-_-_-_-_-_-_-!!!!")
+    print("!!!!_-_-_-_-_.................._-_-_-_-_-_-_-!!!!")
 
 
 def prompt():
-    print('\n' + '+' * (4 + len(myPlayer.position)))
-    print('\n' + '+' * (4 + len(myPlayer.position)))
-    print('+     what would you like to do ?      +')
-    print('+         options include :            +')
-    print()
-    print('+   move , go, travel, walk, examine   +')
-    print('+  inspect, interact, look, and quit   +')
-    print('\n' + '+' * (4 + len(myPlayer.position)))
-    print('\n' + '+' * (4 + len(myPlayer.position)))
+    print("_-_-_-_-_.................._-_-_-_-_-_-_-")
+    print('+                                       +')
+    print('+      what would you like to do ?      +')
+    print('+          options include :            +')
+    print('+                                       +')
+    print('+    move , go, travel, walk,           +')
+    print('+    up   down   left   right           +')
+    print('+                                       +')
+    print('+   examine,inspect, interact, look,    +')
+    print('+                                       +')
+    print('+    and if all else fails try fight    +')
+    print('+                                       +')
+    print('+ or quit, exit, stop,    to end game   +')
+    print("_-_-_-_-_.................._-_-_-_-_-_-_-")
+
+
     action = input(">")
     acceptable_actions = ['move', 'go', 'travel', 'walk',
-                          'quit', 'exit', 'stop', 'esc', 'examine', 'inspect', 'interact', 'look']
+                          'quit', 'exit', 'stop', 'esc', 'examine',
+                          'where', 'attack','inspect', 'interact', 'look']
     while action.lower() not in acceptable_actions:
         print("unknown action typed, try again.\n")
         action = input(">")
@@ -429,8 +503,9 @@ def prompt():
     elif action.lower() in ['examine', 'inspect', 'interact', 'look']:
         player_examine(action.lower())
 
-    # if action.lower()
-    # if action.lower()
+
+
+
 
 
 def player_move(myAction):
@@ -453,8 +528,11 @@ def player_move(myAction):
 
 
 def movement_handler(destination):
-    if destination == '':
+    if destination == 'x':
         print("that way is blocked choose another direction")
+    elif destination == 'o':
+        map_unlock()
+        pass
     else:
         myPlayer.position = destination
         print("\n" + "!! you have moved to " +
@@ -480,6 +558,27 @@ def main_game_loop():
         # here handle if puzzles solved, boss defeated, all zones explored....
 
 
+
+
+
+
+###   load game
+
+
+# # intro
+#     intro1 = ".. your health is a number %i/%i " % (myPlayer.health, myPlayer.maxhealth)
+#     intro2 = ".. your attacks deal out %i  hit points " % myPlayer.attack
+#     intro3 = ".. you have solved %i  puzzles ..." % myPlayer.solves
+#     intro4 = ".. Welcome back to warrior adventure ..\n"
+#     intro5 = ".. I hope you are enjoying your time .. \n"
+
+
+
+
+#### THE GAME BEGINS >>>>
+### ENTER PLAYER NAME SET STORY
+
+
 def set_up_game():
     os.system('clear')
 
@@ -488,65 +587,72 @@ def set_up_game():
     for character in question1:
         sys.stdout.write(character)
         sys.stdout.flush()
-        time.sleep(0.2)
-    player_name = input(">")
-    myPlayer.name = player_name
+        time.sleep(0.1)
+    player_name = input("==> ")
+    if input == None:
+        print("#! HEY _ YOU GOT A NAME RIGHT ? TYPE IT IN ... ")
+        player_name = input("==> ")
+    else:
+        myPlayer.name = player_name
 
+    question2 = "Hello, " + myPlayer.name + " welcome to the game .... \n"
     # need a job ?
-    question2 = "Hello, " + myPlayer.name + " what role do you want to play?\n"
-    question2add = " Choose: warrior , wizard, or thief ... \n"
+    #question2 = "Hello, " + myPlayer.name + " what role do you want to play?\n"
+    # question2add = " Choose: warrior , wizard, or thief ... \n"
     for character in question2:
         sys.stdout.write(character)
         sys.stdout.flush()
-        time.sleep(0.2)
-    for character in question2add:
-        sys.stdout.write(character)
-        sys.stdout.flush()
-        time.sleep(0.06)
-    player_job = input(">")
-    valid_jobs = ['warrior', 'wizard', 'thief']
-    if player_job.lower() in valid_jobs:
-        myPlayer.job = player_job
-        print("Greetings " + myPlayer.name + " The " + myPlayer.job + " .\n")
-    while player_job.lower() not in valid_jobs:
-        player_job = input(">")
-        if player_job.lower() in valid_jobs:
-            myPlayer.job = player_job
-            print("Greetings " + myPlayer.name +
-                  " The " + myPlayer.job + " .\n")
+        time.sleep(0.15)
+    # for character in question2add:
+    #     sys.stdout.write(character)
+    #     sys.stdout.flush()
+    #     time.sleep(0.06)
+    # player_job = input("==> ")
+    # valid_jobs = ['warrior', 'wizard', 'thief']
+    # while player_job.lower() not in valid_jobs:
+    #     print('... choose: warrior, wizard, or thief ...')
+    #     player_job = input("-->")
+    #     if player_job.lower() in valid_jobs:
+    #         myPlayer.job = player_job
+    #         print("Greetings " + myPlayer.name +
+    #               " The " + myPlayer.job + " .\n")
 
-    if myPlayer.job is 'warrior':
-        self.health = 120
-        self.magic = 20
-        self.status_effects = ['axe_swing']
-    if myPlayer.job is 'wizard':
-        self.health = 50
-        self.magic = 120
-        self.status_effects = ['fire_ball']
-    if myPlayer.job is 'thief':
-        self.health = 80
-        self.magic = 80
-        self.status_effects = ['sneak_out']
+    # if myPlayer.job is 'warrior':
+    #     self.health = 120
+    #     self.magic = 20
+    #     self.special = 'axe_swing'
+    # if myPlayer.job is 'wizard':
+    #     self.health = 50
+    #     self.magic = 120
+    #     self.special = 'fire_ball'
+    # if myPlayer.job is 'thief':
+    #     self.health = 80
+    #     self.magic = 80
+    #     self.special = 'sneak_out'
 
 
 # intro
-    intro1 = f".. your health is a number" + str(myPlayer.health) +  " hp ! ..\n"
-    intro2 = f".. your magic is a different number" + \
-        str(myPlayer.magic) + " mp ! ..\n"
-    intro3 = ".. Welcome to Ye Olde Wooden Stock ..\n"
+    intro1 = ".. your health is a number %i/%i " % (myPlayer.health, myPlayer.maxhealth)
+    intro2 = ".. your attacks deal out %i  hit points " % myPlayer.attack
+    intro22 = ".. you have solved %i  puzzles ..." % myPlayer.solves
+    intro3 = ".. Welcome to warrior adventure ..\n"
     intro4 = ".. I hope you enjoy your time .. \n"
     intro5 = ".. when suddenly there was a noise ..\n"
     intro6 = ".. SSSSSSCCCCRRRRRCCCCHHHHHH!!!!!@$#<<|>> ..\n "
     intro7 = ".. oh no what was that awful screech ..\n"
     intro8 = ".. lets go see what the noise was ..\n"
-    intro9 = " ...                           ... "
-    intro10 = " ...                           ... "
+    intro9 = " ...       . . .              ... "
+    intro10 = " ...                ...              ...     ... "
 
     for character in intro1:
         sys.stdout.write(character)
         sys.stdout.flush()
         time.sleep(0.06)
     for character in intro2:
+        sys.stdout.write(character)
+        sys.stdout.flush()
+        time.sleep(0.06)
+    for character in intro22:
         sys.stdout.write(character)
         sys.stdout.flush()
         time.sleep(0.06)
@@ -581,18 +687,23 @@ def set_up_game():
     for character in intro10:
         sys.stdout.write(character)
         sys.stdout.flush()
-        time.sleep(0.04)
+        time.sleep(0.003)
 
     os.system('clear')
-    print("#$#$#$#$#$#$#$#$#$#$#$#$#")
-    print('#$#                   #$#')
-    print('#$#                   #$#')
-    print('#$#     LETS BEGIN    #$#')
-    print('#$#                   #$#')
-    print('#$#                   #$#')
-    print('#$#  game starts now  #$#')
-    print('#$#                   #$#')
-    print("#$#$#$#$#$#$#$#$#$#$#$#$#")
+    print('!#######################################!')
+    print('#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#')
+    print('#$#                                   #$#')
+    print('#$#                                   #$#')
+    print('#$#           LETS BEGIN !!           #$#')
+    print('#$#                                   #$#')
+    print('#$#                                   #$#')
+    print('#$#          game starts now          #$#')
+    print('#$#                                   #$#')
+    print('#$#                                   #$#')
+    print('#$#                                   #$#')
+    print('#$#                                   #$#')
+    print('#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#$#')
+    print('!#######################################!')
     main_game_loop()
 
 
