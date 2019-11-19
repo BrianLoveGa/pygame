@@ -524,9 +524,9 @@ def player_move(myAction):
         destination = zonemap[myPlayer.position][RIGHT]
         movement_handler(destination)
     else:
-        print("please enter a valid direction")
-
-
+        prin t("please enter a valid direction")
+ 
+ 
 def movement_handler(destination):
     if destination == 'x':
         print("that way is blocked choose another direction")
